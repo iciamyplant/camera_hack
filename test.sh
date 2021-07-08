@@ -1,0 +1,4 @@
+#ifconfig
+#nmap
+#ettercap
+#wireshark
