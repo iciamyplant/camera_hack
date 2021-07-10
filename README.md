@@ -90,6 +90,41 @@ ssh *login*@*adresseipdemonordi* #verifier que le port 22 n'est pas bloque par u
 
 ### Analyser le réseau et filtrer le trafic avec un pare-feu
 
+#### 1. Lorsque vous êtes connectés à l'internet, vous avez régulièrement des applications qui vont se connecter puis télécharger et envoyer des informations. Comment surveiller ce qui se passe ? Quelle application est en train de communiquer et sur quel port ?
+
+
+Chaque IP est associee a un hostname (= nom en toutes lettres plus facile à mémoriser et qui revient exactement au même que d'écrire l'adresse IP). L'association des 2 est faite par les serveurs DNS. Si je tappe siteduzero.com dans mon navigateur je tombe sur openclassroom, plus facile que de retenir l'adresse ip.
+
+
+| commande | fonctionnement |
+|----------|-------|
+| host *google.fr*  | nous indique ladresse IP du hostname google.fr | 
+| whois *siteduzero.com* | permet d'obtenir toutes les infos sur un nom de domaine (prenom, adresse ...) |
+| ifconfig | permet de gérer les connexions réseau de votre machine|
+| netstat | permet d'analyser ces connexions, de connaître des statistiques, etc |
+
+
+**ifconfig** :
+- liste les interfaces reseau (eth0, lo ...) et permet de faire des reglages reseau (par exemple desactivier l'interface eth0 : ifconfig eth0 down)
+- lo : c'est la boucle locale. Tout le monde doit l'avoir c'est connexion a nous meme
+- packets *un chiffre pas egal a 0* indique l'interface active la plus utilisee 
+
+
+**netstat** :
+- netstat permet d'analyser ces connexions, de connaître des statistiques, etc.
+- netstat -i : tableau présentant, pour chaque interface réseau que vous avez, une série de statistiques d'utilisation.
+- netstat -uta : lister toutes les connexions ouvertes. Ce tableau vous indique qui, depuis l'adresse locale, est connecté à qui (à une adresse distante).
+- netstat -ta : idem que -uta mais on enleve les connexions UDP.
+- l'etat LISTEN : à l'écoute des connexions entrantes.
+- l'etat ESTABLISHED : la connexion a été établie avec l'ordinateur distant
+- regarder les ports sur lesquels ces connexions ecoutent (après le symbole « : » dans colonne "adresse locale") : on peut se connecter à chaque ordinateur via différentes « portes » appelées ports. Chaque service utilise un port différent (page web 80, fichier transfert 21, email 110). Ouvrir une page web et y aura plein de connexions established
+
+
+#### 2. Savoir paramétrer un pare-feu est essentiel : Configurer le parefeu iptables
+
+- Il permet d'établir un certain nombre de règles pour dire par quels ports on peut se connecter à votre ordinateur, mais aussi à quels ports vous avez le droit de vous connecter. Notre objectif est de bloquer par défaut toutes ces portes et d'autoriser seulement celles dont vous avez besoin, que vous considérez comme « sûres » et que vous utilisez. Par exemple, le port 80 utilisé pour le web est un port sûr que vous pouvez activer.
+- Avoir un pare-feu ne vous prémunit pas contre les virus. En revanche, cela rend la tâche particulièrement difficile aux pirates qui voudraient accéder à votre machine.
+- voir toutes les regles de config sur openclassroom
 
 - [Tryhackme](https://tryhackme.com/room/linuxfundamentalspart1)
 
