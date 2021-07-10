@@ -30,7 +30,7 @@ Sous Linux, on a choisi de placer tous les programmes (paquets) au même endroit
 | paquet | Sous Ubuntu, pas de programmes d'installation mais des paquets. Sorte de dossier zippé qui contient tous les fichiers du programme (fichier.deb). Contient toutes les instructions nécessaires pour installer le programme.|
 | depot/repository | Tous les.deb sont rassemblés au même endroit sur un même serveur appelé dépôt. C'est le serveur sur lequel on va télécharger nos paquets. (y en a plein avec les memes packets dessus et on peut changer le serveur sur lequel on recupere nos packets par defaut) |
 |dependance |un paquet peut avoir besoin de plusieurs autres paquets pour fonctionner, on dit qu'il a des dépendances|
-|apt-get | programme de gestion des paquets|
+|apt-get | programme de gestion des paquets. Si paquets pas dispo avec apt-get il faudra compiler un programme depuis les sources (avec tar zxvf)|
 
 - **apt-get update** (optionnel) : pour mettre notre cache à jour si ce n'est pas déjà fait ;
 - apt-cache search monpaquet (optionnel) : pour rechercher le paquet que nous voulons télécharger si nous ne connaissons pas son nom exact ;
@@ -66,10 +66,31 @@ Plusieurs programmes peuvent tourner en même temps au sein d'une même console.
 
 ### La connexion sécurisée à distance avec SSH
 
+Toutes les machines sous Linux peuvent être configurées pour que l'on s'y connecte à distance, pour peu qu'elles restent allumées.
 
+- Pourquoi faut-il sécuriser les échanges ?
+Comme on ne peut pas complètement empêcher quelqu'un d'intercepter les données qui transitent sur l'internet (par exemple avec wireshark), il faut trouver un moyen pour que le client et le serveur communiquent de manière sécurisée. Le chiffrement sert précisément à ça : si le pirate récupère le mot de passe chiffré, il ne peut rien en faire.
 
-### Transférer des fichiers
+- Comment fait SSH pour sécuriser les échanges ?
+Il existe des tonnes d'algorithmes de chiffrement classables en deux categories : les chiffrements symétriques (une seule cle) et les chiffrements asymétriques (cle privee + cle publique). SSH = utilise d'abord le chiffrement asymétrique pour s'échanger discrètement une clé secrète de chiffrement symétrique. Ensuite, on utilise tout le temps la clé de chiffrement symétrique pour chiffrer les échanges.
+
+- Comment utiliser SSH concrètement ?
+Si vous voulez accéder à votre PC depuis un autre lieu (et donc suivre le reste de ce chapitre), vous devez le transformer en serveur au préalable.
+```
+##creer le serveur :
+sudo apt-get install openssh-server
+sudo /etc/init.d/ssh start #normalement pas besoin serveur ssh lance au demarrage
+```
+Puis pour s'y connecter, l'authentification par mot de passe ou l'authentification par clés publique et privée du client (ssh-keygen).
+```
+###s'y connecter a partir d'une machine Linux :
+ssh *login*@*adresseipdemonordi* #verifier que le port 22 n'est pas bloque par un parefeu
+# on va nous demander notre mot de passe
+```
+
 ### Analyser le réseau et filtrer le trafic avec un pare-feu
+
+
 - [Tryhackme](https://tryhackme.com/room/linuxfundamentalspart1)
 
 # Network Fundamentals
