@@ -37,8 +37,37 @@ Sous Linux, on a choisi de placer tous les programmes (paquets) au même endroit
 - **apt-get install** monpaquet : pour télécharger et installer notre paquet.
 
 ### Surveiller l'activité du système
+Linux est un système multi-tâches et multi-utilisateurs : il est capable de gérer plusieurs programmes tournant en même temps + plusieurs personnes peuvent utiliser la même machine en même temps (en s'y connectant via Internet).
+
+Série de commandes qui nous permettront de savoir ce qui se passe actuellement dans notre ordinateur :
+
+| commande | fonctionnement |
+|----------|-------|
+| w | plusieurs infos : La charge avec "load average ..." donne le nombre moyen de processus en train de tourner et qui réclament l'utilisation du processeur. En dessous c'est une ligne par user connecte. FROM (ou DE) indique l'IP (si connecte en local sera :0).  WHAT (ou quoi) la commande qu'il est en train d'exécuter en ce moment. En général, si vous voyez bash, cela signifie que l'invite de commandes est ouverte et qu'aucune commande particulière n'est exécutée.|
+| who | Lui aussi donne la liste des connectes |
+| ps | obtenir la liste des processus qui tournent au moment où vous lancez la commande et sur l'utilisateur sur lequel on est. Cette liste n'est pas actualisée en temps réel |
+|ps -ef|  la liste de tous les processus lancés par tous les utilisateurs sur toutes les consoles |
+|ps -ejH | afficher les processus en arbre, pour savoir quel processus enfant appartient a quel parent |
+|top | processus en temps reel. En haut y a l'uptime et la charge, mais aussi la quantité de processeur et de mémoire utilisée (voir man plein de speficites)|
+|sudo halt| arreter l'ordinateur|
+|sudo reboot| redemarrer l'ordinateur|
+
+
 ### Exécuter des programmes en arrière-plan
+Plusieurs programmes peuvent tourner en même temps au sein d'une même console. 
+
+| commande | fonctionnement |
+|----------|-------|
+| & | rajouter le petit symbole & à la fin de la commande que vous voulez envoyer en arrière-plan. Exemple : cp video.avi copie_video.avi & |
+|nohup |détacher le processus de la console, meme si on quitte la console ca kill pas le processus. Exemple : nohup cp video.avi copie_video.avi. La sortie de la commande est par défaut redirigée vers un fichiernohup.out|
+|Ctrl + Z puis bg| mettre en pause l'exécution du programme qui est en premier plan puis le passer en arriere plan avec bg|
+| jobs | connaître les processus qui tournent en arrière-plan|
+|fg | reprendre un processus au premier plan|
+
 ### La connexion sécurisée à distance avec SSH
+
+
+
 ### Transférer des fichiers
 ### Analyser le réseau et filtrer le trafic avec un pare-feu
 - [Tryhackme](https://tryhackme.com/room/linuxfundamentalspart1)
