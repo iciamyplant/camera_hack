@@ -130,6 +130,7 @@ Chaque IP est associee a un hostname (= nom en toutes lettres plus facile à mé
 
 # Network Fundamentals
 - [Tryhackme](https://tryhackme.com/paths)
+- [openclassroom](https://openclassrooms.com/fr/courses/857447-apprenez-le-fonctionnement-des-reseaux-tcp-ip/853038-le-materiel-de-couche-2-le-commutateur)
 
 ### OSI Model
 Le modèle OSI est une norme qui préconise comment les ordinateurs devraient communiquer entre eux. Modèle a 7 couches. Pour communiquer par courrier il faut un émetteur, récepteur, support de transmission (lettre) etc. Les chercheurs ont imaginé 7 éléments a mettre en place pour communiquer sur internet.
@@ -161,20 +162,64 @@ Rôle : RAS.
 Rôle secondaire : RAS.
 Matériel associé : le proxy.
 
-Le modèle OSI ajoute deux règles plus générales entre les couches :
-- chaque couche est indépendante : Par exemple, l'adresse IP qui est une adresse de couche 3 ne pourra pas être utilisée par une autre couche, sous peine de ne pas respecter le modèle OSI.
-- chaque couche ne peut communiquer qu'avec une couche adjacente : Si on entre l'adresse d'un site dans la barre de recherche, et le site apparaît. L'application (le navigateur) de couche 7, s'est adressée aux couches réseau pour que celles-ci transmettent l'information à l'application demandée sur la machine demandée (le serveur web sur la machine google.com par exemple). On a parcouru les couches du modèle OSI de haut en bas.
+Le modèle OSI ajoute deux règles :
+
+--> chaque couche est indépendante : exemple, l'adresse IP qui est une adresse de couche 3 ne pourra pas être utilisée par une autre couche.
+
+--> chaque couche ne peut communiquer qu'avec une couche adjacente : Si on entre l'adresse d'un site dans la barre de recherche. L'application (le navigateur) de couche 7, s'est adressé a la couche du dessous, on a parcouru les couches du modèle OSI de haut en bas.
+
+L'encapsulation : un message est envoyé depuis la couche 7 du modèle OSI, et il traverse toutes les couches jusqu'à arriver à la couche 1 pour être envoyé sur le réseau. En fait, un en-tête va être ajouté à chaque passage par une couche. Au passage par la couche 4, on ajoutera l'en-tête de couche 4, puis celui de couche 3 en passant par la couche 3, et ainsi de suite. On encapsule un message dans un autre.  ce qui va circuler sur le réseau est une trame de couche 2, qui contient le datagramme de couche 3 (qui lui-même contiendra l'élément de couche 4).
 
 #### 1. Couche 1 et 2 : communiquer dans un réseau local (LAN)
 
-- couche 1 : brancher les machines = acheminer des signaux électriques, des 0 et des 1 en gros. Les 0 et les 1 vont circuler grâce aux différents supports de transmission. Les câbles coaxiaux, la fibre optique. Y a differents moyens de brancher les machines entre elles (la topologie en bus, la topologie en anneau, la topologie en étoile).
-- couche 2 : faire communiquer les machines qui sont branchées sur un réseau local. Chaque machine a une adresse MAC. L'adresse MAC est l'adresse d'une carte réseau (carte reseau contenue dans la machine). Étant donné que nous discutons entre des machines très différentes, qui ont des OS différents, nous devons créer un langage de communication commun pour se comprendre (= protocole). Le protocole le plus utilise sur la couche 2 est le protocole Ethernet. Nous avons vu que des 0 et des 1 allaient circuler sur nos câbles. Nous allons donc recevoir des choses du genre : 001101011110001100100011111000010111000110001... Ce qui ne veut pas dire grand-chose tant que nous ne nous entendons pas sur leur signification. Le protocole va ainsi définir quelles informations vont être envoyées, et surtout dans quel ordre. Par exemple on peut dire que les 48 premiers caractères que nous allons recevoir représentent l'adresse MAC de l'émetteur (puisque l'adresse MAC fait 48 bits) les 48 suivants l'adresse du récepteur, puis enfin le message. Le protocole va donc définir le format des messages envoyés sur le réseau. Plus exactement, nous allons appeler ce message, une trame. La trame est le message envoyé sur le réseau, en couche 2.
+|couche| 1 |
+|------|----|
+| role | brancher les machines = acheminer des signaux électriques, des 0 et des 1 en gros. |
+|fonctionnement | Les 0 et les 1 vont circuler grâce aux différents supports de transmission. Les câbles coaxiaux, la fibre optique. |
+| topologie | Y a differents moyens de brancher les machines entre elles (la topologie en bus, la topologie en anneau, la topologie en étoile). |
+
+|couche| 2 |
+|------|----|
+| role | faire communiquer les machines qui sont branchées sur un réseau local.|
+| adresse | Chaque machine a une adresse MAC. L'adresse MAC est l'adresse d'une carte réseau (carte reseau contenue dans la machine). |
+| protocole | Étant donné que nous discutons entre des machines très différentes, qui ont des OS différents, nous devons créer un langage de communication commun pour se comprendre (= protocole). Le protocole le + utilise sur la couche 2 est le protocole Ethernet. |
+| fonctionnement protocole | Nous avons vu que des 0 et des 1 allaient circuler sur nos câbles. Nous allons donc recevoir des choses du genre : 001101011110001100100011111000010111000110001... Ce qui ne veut pas dire grand-chose tant que nous ne nous entendons pas sur leur signification. Le protocole va définir quelles informations vont être envoyées, et dans quel ordre. Par exemple on peut dire que les 48 premiers caractères que nous allons recevoir représentent l'adresse MAC de l'émetteur (puisque l'adresse MAC fait 48 bits) les 48 suivants l'adresse du récepteur, puis enfin le message. Le protocole va définir le format des messages envoyés sur le réseau. |
+| nom des messages | Ce message est appelle une trame. La trame est le message envoyé sur le réseau, en couche 2. |
+| materiel| Le commutateur (= switch) est un matériel qui va pouvoir nous permettre de relier plusieurs machines entre elles. Nous allons donc brancher nos machines au switch, voire d'autres switchs à notre switch. Pour envoyer la trame vers la bonne machine, le switch se sert de l'adresse MAC destination contenue dans l'en-tête de la trame.|
+
 
 #### 2. Couche 3 : communiquer entre réseaux
 
+Comment envoyer un message à un réseau auquel on est pas directement reliés ? Les réseaux sont tous reliés entre eux, comme une chaîne. Internet est un ensemble de réseaux collés les uns aux autres. Pour voir par quelles machines on passe pour aller jusqu'a une machine :
+```
+sudo apt install traceroute
+traceroute www.siteduzero.com #chacune des lignes correspond à une machine que nous avons rencontrée
+```
+
+|couche| 3 |
+|------|----|
+| role | Communiquer entre réseaux|
+| adresse | Adresse IP : l'adresse IP est en fait l'adresse du réseau ET de la machine. Une partie de l'adresse IP représentera l'adresse du réseau, et l'autre partie l'adresse de la machine. C'est le masque qui va indiquer quelle est la partie réseau de l'adresse, et quelle est la partie machine. |
+| protocole | le protocole IP, ou Internet Protocol.|
+| nom des messages | Pour le protocole IP, le message s'appelle un datagramme ou un paquet. (qui contiendra l'IP source et l'IP de la machine de destination)|
+| materiel| routeur : va nous permettre d'envoyer un message en dehors de notre réseau. C'est une machine qui a plusieurs interfaces (plusieurs cartes réseau), chacune reliée à un réseau. Son rôle va être d'aiguiller les paquets reçus entre les différents réseaux.|
+
+```
+# Exemple : on associe l'adresse IP 192.168.0.1 au masque 255.255.0.0.
+255.255.0.0 -> 11111111.11111111.00000000.00000000  #tous les bits a 1 = la partie reseau
+192.168.0.1 -> 11000000.10101000.00000000.00000001  #tous les bits à 0 = la partie machine de l'adresse
+```
+Donc la partie réseau de l'adresse est 192.168, et la partie machine est 0.1.
 
 
-### Packets & Frames
+
+### Wireshark
+Wireshark est un sniffer. Un sniffer est un programme qui écoute sur le réseau, intercepte toutes les trames reçues par votre carte réseau, et les affiche à l'écran.
+- on peut voir la liste des trames reçues lors d'une requête (couche 1 "Frame 187", la couche 2 "Ethernet", la couche 3 "IP" etc.),
+- en cliquant sur l'une des trames on voit que Wireshark sépare les éléments de chacune des couches du modèle OSI
+- on peut voir le contenu de chacune des couches en cliquant sur le triangle en face d'une couche
+
+ 
 ### Extending Your Network
 
 # Offensive Pentesting
