@@ -130,9 +130,50 @@ Chaque IP est associee a un hostname (= nom en toutes lettres plus facile à mé
 
 # Network Fundamentals
 - [Tryhackme](https://tryhackme.com/paths)
-### What is Networking ?
-### Intro to LAN
+
 ### OSI Model
+Le modèle OSI est une norme qui préconise comment les ordinateurs devraient communiquer entre eux. Modèle a 7 couches. Pour communiquer par courrier il faut un émetteur, récepteur, support de transmission (lettre) etc. Les chercheurs ont imaginé 7 éléments a mettre en place pour communiquer sur internet.
+
+- La couche 1 ou **couche physique** :
+Nom : physique.
+Rôle : offrir un support de transmission pour la communication.
+Rôle secondaire : RAS.
+Matériel associé : le hub, ou concentrateur en français.
+- La couche 2 ou **couche liaison** :
+Nom : liaison de données.
+Rôle : connecter les machines entre elles sur un réseau local.
+Rôle secondaire : détecter les erreurs de transmission.
+Matériel associé : le switch, ou commutateur.
+- La couche 3 ou **couche réseau** :
+Nom : réseau.
+Rôle : interconnecter les réseaux entre eux.
+Rôle secondaire : fragmenter les paquets.
+Matériel associé : le routeur.
+- La couche 4 ou **couche transport** :
+Nom : transport.
+Rôle : gérer les connexions applicatives.
+Rôle secondaire : garantir la connexion.
+Matériel associé : RAS.
+- couche 5 et 6 : Modèle OSI = modèle théorique. Le modèle sur lequel s'appuie Internet aujourd'hui est le modèle TCP/IP. Or, ce modèle n'utilise pas les couches 5 et 6, donc... on s'en fiche !
+- La couche 7 ou **couche application** :
+Nom : application.
+Rôle : RAS.
+Rôle secondaire : RAS.
+Matériel associé : le proxy.
+
+Le modèle OSI ajoute deux règles plus générales entre les couches :
+- chaque couche est indépendante : Par exemple, l'adresse IP qui est une adresse de couche 3 ne pourra pas être utilisée par une autre couche, sous peine de ne pas respecter le modèle OSI.
+- chaque couche ne peut communiquer qu'avec une couche adjacente : Si on entre l'adresse d'un site dans la barre de recherche, et le site apparaît. L'application (le navigateur) de couche 7, s'est adressée aux couches réseau pour que celles-ci transmettent l'information à l'application demandée sur la machine demandée (le serveur web sur la machine google.com par exemple). On a parcouru les couches du modèle OSI de haut en bas.
+
+#### 1. Couche 1 et 2 : communiquer dans un réseau local (LAN)
+
+- couche 1 : brancher les machines = acheminer des signaux électriques, des 0 et des 1 en gros. Les 0 et les 1 vont circuler grâce aux différents supports de transmission. Les câbles coaxiaux, la fibre optique. Y a differents moyens de brancher les machines entre elles (la topologie en bus, la topologie en anneau, la topologie en étoile).
+- couche 2 : faire communiquer les machines qui sont branchées sur un réseau local. Chaque machine a une adresse MAC. L'adresse MAC est l'adresse d'une carte réseau (carte reseau contenue dans la machine). Étant donné que nous discutons entre des machines très différentes, qui ont des OS différents, nous devons créer un langage de communication commun pour se comprendre (= protocole). Le protocole le plus utilise sur la couche 2 est le protocole Ethernet. Nous avons vu que des 0 et des 1 allaient circuler sur nos câbles. Nous allons donc recevoir des choses du genre : 001101011110001100100011111000010111000110001... Ce qui ne veut pas dire grand-chose tant que nous ne nous entendons pas sur leur signification. Le protocole va ainsi définir quelles informations vont être envoyées, et surtout dans quel ordre. Par exemple on peut dire que les 48 premiers caractères que nous allons recevoir représentent l'adresse MAC de l'émetteur (puisque l'adresse MAC fait 48 bits) les 48 suivants l'adresse du récepteur, puis enfin le message. Le protocole va donc définir le format des messages envoyés sur le réseau. Plus exactement, nous allons appeler ce message, une trame. La trame est le message envoyé sur le réseau, en couche 2.
+
+#### 2. Couche 3 : communiquer entre réseaux
+
+
+
 ### Packets & Frames
 ### Extending Your Network
 
