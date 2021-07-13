@@ -181,7 +181,7 @@ L'encapsulation : un message est envoyé depuis la couche 7 du modèle OSI, et i
 |couche| 2 |
 |------|----|
 | role | faire communiquer les machines qui sont branchées sur un réseau local.|
-| adresse | Chaque machine a une adresse MAC. L'adresse MAC est l'adresse d'une carte réseau (carte reseau contenue dans la machine). |
+| identifiant | Chaque machine a une adresse MAC. L'adresse MAC est l'adresse d'une carte réseau (carte reseau contenue dans la machine). |
 | protocole | Étant donné que nous discutons entre des machines très différentes, qui ont des OS différents, nous devons créer un langage de communication commun pour se comprendre (= protocole). Le protocole le + utilise sur la couche 2 est le protocole Ethernet. |
 | fonctionnement protocole | Nous avons vu que des 0 et des 1 allaient circuler sur nos câbles. Nous allons donc recevoir des choses du genre : 001101011110001100100011111000010111000110001... Ce qui ne veut pas dire grand-chose tant que nous ne nous entendons pas sur leur signification. Le protocole va définir quelles informations vont être envoyées, et dans quel ordre. Par exemple on peut dire que les 48 premiers caractères que nous allons recevoir représentent l'adresse MAC de l'émetteur (puisque l'adresse MAC fait 48 bits) les 48 suivants l'adresse du récepteur, puis enfin le message. Le protocole va définir le format des messages envoyés sur le réseau. |
 | nom des messages | Ce message est appelle une trame. La trame est le message envoyé sur le réseau, en couche 2. |
@@ -199,28 +199,95 @@ traceroute www.siteduzero.com #chacune des lignes correspond à une machine que 
 |couche| 3 |
 |------|----|
 | role | Communiquer entre réseaux|
-| adresse | Adresse IP : l'adresse IP est en fait l'adresse du réseau ET de la machine. Une partie de l'adresse IP représentera l'adresse du réseau, et l'autre partie l'adresse de la machine. C'est le masque qui va indiquer quelle est la partie réseau de l'adresse, et quelle est la partie machine. |
-| protocole | le protocole IP, ou Internet Protocol.|
+| identifiant | Adresse IP : l'adresse IP est en fait l'adresse du réseau ET de la machine. Une partie de l'adresse IP représentera l'adresse du réseau, et l'autre partie l'adresse de la machine. C'est le masque qui va indiquer quelle est la partie réseau de l'adresse, et quelle est la partie machine. |
+| protocole | le protocole IP, ou Internet Protocol. (mais y a aussi d'autres protocoles : ICMP, ARP...)|
 | nom des messages | Pour le protocole IP, le message s'appelle un datagramme ou un paquet. (qui contiendra l'IP source et l'IP de la machine de destination)|
-| materiel| routeur : va nous permettre d'envoyer un message en dehors de notre réseau. C'est une machine qui a plusieurs interfaces (plusieurs cartes réseau), chacune reliée à un réseau. Son rôle va être d'aiguiller les paquets reçus entre les différents réseaux.|
+| materiel| routeur : va nous permettre d'envoyer un message en dehors de notre réseau. C'est une machine qui a plusieurs interfaces (plusieurs cartes réseau), chacune reliée à un réseau. Son rôle va être d'aiguiller les paquets reçus entre les différents réseaux, se différencie d'une simple machine, car il accepte de relayer des paquets qui ne lui sont pas destinés. Aiguille les paquets grâce à sa table de routage qui indique quelle passerelle utiliser pour joindre un réseau.|
+
 
 ```
 # Exemple : on associe l'adresse IP 192.168.0.1 au masque 255.255.0.0.
 255.255.0.0 -> 11111111.11111111.00000000.00000000  #tous les bits a 1 = la partie reseau
 192.168.0.1 -> 11000000.10101000.00000000.00000001  #tous les bits à 0 = la partie machine de l'adresse
+# Donc la partie réseau de l'adresse est 192.168, et la partie machine est 0.1.
 ```
-Donc la partie réseau de l'adresse est 192.168, et la partie machine est 0.1.
+
+```
+route -n # afficher la table de routage
+## La première ligne est pour notre réseau, et on voit une particularité de Linux qui n'indique pas notre adresse, mais 0.0.0.0. C'est comme ça.
+La seconde est la route par défaut qui est ici 88.191.45.1.
+route del default # enlever la route par defaut
+route add default gw 10.0.0.254 # changer la route par defaut pour 10.0.0.254
+route add -net 192.168.0.0 netmask 255.255.255.0 gw 10.0.0.253 #ajouter une route spécifique si nous le souhaitons pour aller vers le réseau 192.168.0.0/24 en passant par la passerelle 10.0.0.253
+```
+
+#### 3. Couche 4 : communiquer entre applications
+
+Un serveur = offrir un service. Un serveur web va mettre à disposition des internautes des pages web. Un serveur de messagerie mettra à disposition des adresses mail ainsi qu'un service d'envoi et de réception de mails.
+
+Étant donné que le serveur est censé fournir un service accessible tout le temps, on dit qu'il est en écoute. En fait, le serveur va écouter sur le réseau et être prêt à répondre aux requêtes qui lui sont adressées.
+
+````
+netstat -antp #tous les listen en train d'ecouter
+#La colonne "Adresse locale" nous donne l'adresse IP en écoute, ainsi qu'un numéro que nous ne connaissons pas encore.
+#La colonne "Etat" nous indique l'état du service
+#La colonne "PID/program name" nous indique le numéro du processus en écoute ainsi que son nom.
+#Si le service a une addr locale 127.0.0.1 : service non joignable depuis le reseau, joignable que depuis la machine elle-même, reserve a une utilisation locale.
+````
+
+Client = Oui, en ce moment même vous utilisez un client web qui est votre navigateur et qui se connecte au serveur du Site du Zéro.
+ = Connexion client/serveur entre votre navigateur et le serveur web du Site du Zéro. Client de messagerie comme Outlook.
+ 
+|couche| 4 |
+|------|----|
+| role |  objectif de faire dialoguer ensemble des applications, cad gérer les connexions applicatives|
+| identifiant | le port : Le port c'est l'adresse d'une application sur une machine. On a 65535 ports à notre disposition, et pleins de ports reserves (web=80, mail=25, ssh=22, imap=143, proxy=8080, https=443...)|
+| protocoles | 2 protocoles : TCP (applications qui nécessitent un transport fiable des données, mais qui n'ont pas de besoin particulier en ce qui concerne la vitesse de transmission par exemple les mails ou le web) et UDP (applications qui nécessitent un transport immédiat des informations, mais qui peuvent se permettre de perdre quelques informations. Par exemple le streaming ou la radio) |
+| nom des messages | datagramme UDP (qui contient: Port Source=addrapplicationqui envoielinfo - Port Destination=addrapplicationquirecoitinfoparexmonnavigateur - Longueur totale - Checksum - Données à envoyer) et le segment TCP (Port Source - Port Destination - Flags - Checksum - Données à envoyer)|
+
+#### 4. Couche 7 : Applications 
+Elle est là pour représenter les applications pour lesquelles nous allons mettre en œuvre des communications. Les couches 1 à 4 sont appelées les couches "réseau". Ce sont elles qui ont la responsabilité d'acheminer les informations d'une machine à une autre, pour les applications qui le demandent.
+
+#### 5. protocoles DHCP, DNS, et HTTP
+- Protocole DHCP = Un protocole pour distribuer des adresses IP. La première fonction d'un serveur DHCP est de fournir des adresses IP aux machines en faisant la demande.
+- Protocole DNS = Systeme de nomage pour eviter d'avoir a retenir toutes les adresses ip, se charge de convertir (on parle de résolution) le nom du site web demandé en adresse IP.
+- Protocole HTTP = Le principe du protocole HTTP est de transporter ces pages HTML, et potentiellement quelques informations supplémentaires. Le serveur web met donc à disposition les pages web qu'il héberge, et le protocole HTTP les transporte sur le réseau pour les amener au client.
 
 
+### Ifconfig
+````
+ifconfig
+ifconfig eth0 10.0.0.1 netmask 255.255.255.0 #modifier son adresse et la remplacer par 10.0.0.1/24 
+````
 
-### Wireshark
+- La première est l'interface eth0 (eth pour Ethernet !) qui est ma carte réseau.
+- Enfin nous avons l'interface lo (pour local, ou loopback) qui est une interface réseau virtuelle qui n'est accessible que sur la machine elle-même. Son adresse est toujours 127.0.0.1, sur toutes les machines. C'est une convention.
+- Si ifconfig indique inet adr:88.191.45.68  Bcast:88.191.45.255  Masque:255.255.255.0 : adresse IP 88.191.45.68, masque 255.255.255.0 et l'adresse de broadcast 88.191.45.255.
+
+
+### Wireshark et tcpdump
 Wireshark est un sniffer. Un sniffer est un programme qui écoute sur le réseau, intercepte toutes les trames reçues par votre carte réseau, et les affiche à l'écran.
 - on peut voir la liste des trames reçues lors d'une requête (couche 1 "Frame 187", la couche 2 "Ethernet", la couche 3 "IP" etc.),
 - en cliquant sur l'une des trames on voit que Wireshark sépare les éléments de chacune des couches du modèle OSI
 - on peut voir le contenu de chacune des couches en cliquant sur le triangle en face d'une couche
 
- 
-### Extending Your Network
+[tuto wireshark](https://openclassrooms.com/fr/courses/857447-apprenez-le-fonctionnement-des-reseaux-tcp-ip/855562-rendre-mes-applications-joignables-sur-le-reseau)
+
+Tcpdump est un sniffer, comme wireshark, mais en ligne de commande sous linux.
+ est un sniffer. C'est un programme qui est capable d'écouter toutes les trames qui arrivent sur notre carte réseau et de nous les afficher à l'écran (comme wireshark, mais en ligne de commande sous linux).
+````
+tcpdump -i eth0 icmp
+````
+
+### Ping
+Machine emetrice du ping fait un ICMP echo request, machine receptrice fait un ICMP echo reply (ping utilise le protocole ICMP). Permet de savoir si la machine pingée est correctement joignable sur le reseau. + mesure le temps necessaire au paquet pour faire l'aller retour entre la machine emetrice et la machine receptrice.
+
+````
+ping 8.8.8.8 #je ping le serveur DNS de google
+````
+
+
+
 
 # Offensive Pentesting
 - [Certification CEH v11](https://bookshelf.vitalsource.com/#/books/9781635675337/cfi/112!/4/4@0.00:36.5)
