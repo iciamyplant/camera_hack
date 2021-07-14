@@ -293,8 +293,34 @@ ping 8.8.8.8 #je ping le serveur DNS de google
 - [Certification CEH v11](https://bookshelf.vitalsource.com/#/books/9781635675337/cfi/112!/4/4@0.00:36.5)
 - [Tryhackme](https://tryhackme.com/paths)
 
-### Scanning Networks
-### Enumeration
+### Attaques
+
+| Attack| Description | Example|
+|------|----|-------|
+| Passive Attacks | interception et surveillance du trafic réseau et des flux de données sur le réseau cible sans modifier les données. Capturer les données ou les fichiers transmis sur le réseau sans le consentement de l'utilisateur (données non chiffrées en transit, informations d'identification en texte clair...) | **sniffing** (wireshark) and eavesdropping, footprinting|
+| Active Attacks | altèrent les données en transit ou perturbent la communication ou les services entre les systèmes pour contourner ou pénétrer dans les systèmes sécurisés. Les attaquants lancent des attaques sur le système ou le réseau cible en envoyant activement du trafic pouvant être détecté. | **Ddos** (prendre pour cible un système informatique en l’inondant de messages entrants ou de requêtes de connexion afin de provoquer un déni de service), **Man-in-the-Middle**, **session hijacking** (technique consistant à intercepter une session TCP initiée entre deux machine afin de la détourner), **SQL injection** (injecter dans la requête SQL en cours un morceau de requête non prévu par le système et pouvant en compromettre la sécurité.), **malware attacks** (virus, ransomware..), **spoofing** (usurpation d'identite, se faire passer pour apple par ex), **password-based attacks** (cracker mdp), **Cryptography attacks**|
+| Close-in Attacks | Lorsque l'attaquant se trouve à proximité physique du système ou du réseau cible. Objectif de collecter ou de modifier des informations ou d'en perturber l'accès. | Eavesdropping, **shoulder surfing** (regarder par-dessus l'épaule), **dumpster diving** (chercher dans la poubelle de quelqu'un des informations)|
+| Insider Attacks | effectuées par des personnes de confiance qui ont un accès physique aux actifs critiques de la cible. Utiliser un accès privilégié pour enfreindre les règles ou provoquer intentionnellement une menace pour les informations ou les systèmes d'information de l'organisation.| **theft of physical devices** (vol d'appareils physiques) and **planting keyloggers** (enregistreurs de claviers), backdoors, malware, social engineering |
+| Distribution Attacks | Lorsque les attaquants altèrent le matériel ou le logiciel avant l'installation. Par exemple les portes dérobées créées par les fournisseurs de logiciels ou de matériel au moment de la fabrication | modification of software or hardware during production |
+
+### Etapes
+
+| Etape |description|
+|------|----|
+|**1** |Reconnaissance : recolter le plus d'infos genre organization’s clients, employees, operations, network, and systems|
+|**2** |Scanning : utiliser les détails recueillis lors de la reconnaissance pour scanner le réseau à la recherche d'informations spécifiques genre mapping of systems, routers, and firewalls by using simple tools such as the standard Windows utility Traceroute. L'analyse peut inclure the use of dialers, port scanners, network mappers, ping tools, vulnerability scanners, or other tools. Les attaquants extraient des informations telles que les machines actives, le port, l'état du port, les détails du système d'exploitation, le type de périphérique et la disponibilité du système pour lancer une attaque. scanners de vulnérabilités, qui peuvent rechercher des milliers de vulnérabilités connues sur un réseau cible. Cela donne un avantage à l'attaquant car il n'a qu'à trouver un seul moyen d'entrée|
+|**3** |Gaining Access :|
+|**4**|  Maintaining Access :|
+|**5**|Clearing Track :|
+
+- **L’étape 3** = s’assurer que cette faille restera toujours ouverte (pour utiliser a chaque fois, souvent par l’installation d’une backdoor)
+- **L’étape 4** = faire quelque chose de cette faille (exemple, prendre possession d’un compte et augmenter les privilèges de ce compte)
+- **L’étape 5** = exploiter localement les ressources
+- **L’étape 6** = effacer ses traces
+
+
+#### Scanning Networks
+###  Enmeration
 ### Vulnerability Analysis
 ### System Hacking
 ### Malware Threats
