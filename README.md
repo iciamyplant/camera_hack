@@ -307,25 +307,23 @@ ping 8.8.8.8 #je ping le serveur DNS de google
 
 | Etape |description|
 |------|----|
-|**1** |Reconnaissance : recolter le plus d'infos genre organization’s clients, employees, operations, network, and systems|
-|**2** |Scanning : utiliser les détails recueillis lors de la reconnaissance pour scanner le réseau à la recherche d'informations spécifiques genre mapping of systems, routers, and firewalls by using simple tools such as the standard Windows utility Traceroute. L'analyse peut inclure the use of dialers, port scanners, network mappers, ping tools, vulnerability scanners, or other tools. Les attaquants extraient des informations telles que les machines actives, le port, l'état du port, les détails du système d'exploitation, le type de périphérique et la disponibilité du système pour lancer une attaque. scanners de vulnérabilités, qui peuvent rechercher des milliers de vulnérabilités connues sur un réseau cible. Cela donne un avantage à l'attaquant car il n'a qu'à trouver un seul moyen d'entrée|
-|**3** |Gaining Access :|
-|**4**|  Maintaining Access :|
-|**5**|Clearing Track :|
+|**1** | **Reconnaissance** : recolter le plus d'infos genre organization’s clients, employees, operations, network, and systems|
+|**2** | **Scanning** : utiliser les détails recueillis lors de la reconnaissance pour scanner le réseau à la recherche d'informations spécifiques genre mapping of systems, routers, and firewalls by using simple tools such as the standard Windows utility Traceroute. L'analyse peut inclure the use of dialers, port scanners, network mappers, ping tools, vulnerability scanners, or other tools. Les attaquants extraient des informations telles que les machines actives, le port, l'état du port, les détails du système d'exploitation, le type de périphérique et la disponibilité du système pour lancer une attaque. scanners de vulnérabilités, qui peuvent rechercher des milliers de vulnérabilités connues sur un réseau cible. Cela donne un avantage à l'attaquant car il n'a qu'à trouver un seul moyen d'entrée|
+|**3** | **Gaining Access** : Les attaquants utilisent les vulnérabilités identifiées lors des phases de reconnaissance et d'analyse pour accéder au système et au réseau cibles. The attacker can gain access to the OS, application, or network level (gain access to the target system locally (offline), over a LAN, or the Internet) avec differents types d'attaques. Une fois qu'un attaquant a accès au système cible, il essaie alors d'élever les privilèges afin de prendre le contrôle total. Ce faisant, ils compromettent également les systèmes intermédiaires qui y sont connectés.|
+|**4**| **Maintaining Access** : Une fois qu'un attaquant a accès au système cible avec des privilèges d'administrateur il peut utiliser à la fois le système et ses ressources à volonté. Les attaquants qui choisissent de ne pas être détectés suppriment les preuves de leur entrée et installent une porte dérobée ou un cheval de Troie pour obtenir un accès répété. Ils peuvent également installer des rootkits au niveau du noyau pour obtenir un accès administratif complet à l'ordinateur cible. Les rootkits accèdent au niveau du système d'exploitation, tandis que les chevaux de Troie accèdent au niveau de l'application. Les rootkits et les chevaux de Troie nécessitent que les utilisateurs les installent localement.|
+|**5**| **Clearing Tracks** : utilisent des utilitaires tels que PsTools, Netcat ou des chevaux de Troie pour effacer leurs empreintes des fichiers journaux du système. D'autres techniques incluent la stéganographie et la tunnellisation. Les administrateurs système peuvent déployer des IDS (systèmes de détection d'intrusion) et un logiciel antivirus basés sur l'hôte afin de détecter les chevaux de Troie et autres fichiers et répertoires apparemment compromis |
 
-- **L’étape 3** = s’assurer que cette faille restera toujours ouverte (pour utiliser a chaque fois, souvent par l’installation d’une backdoor)
-- **L’étape 4** = faire quelque chose de cette faille (exemple, prendre possession d’un compte et augmenter les privilèges de ce compte)
-- **L’étape 5** = exploiter localement les ressources
-- **L’étape 6** = effacer ses traces
-
-
-#### Scanning Networks
-###  Enmeration
-### Vulnerability Analysis
-### System Hacking
+### 1. Footprinting and Reconnaissance
+### 2. Scanning Networks
+####  Scanning
+####  Enmeration
+####  Vulnerability Analysis
+### 3. System Hacking
 ### Malware Threats
 ### Sniffing
-### Hacking Wireless Networks
+### Hacking Wireless Networks, Denial-of-Service, Session Hijacking, SQL injection ..
+
+
 
 # Cyber Defense
 - [Tryhackme](https://tryhackme.com/paths)
