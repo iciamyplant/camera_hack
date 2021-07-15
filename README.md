@@ -316,12 +316,26 @@ ping 8.8.8.8 #je ping le serveur DNS de google
 ### 1. Footprinting and Reconnaissance
 ### 2. Scanning Networks
 ####  Scanning
+- Port Scanning : Répertorie les ports et services ouverts. L'analyse des ports consiste à se connecter ou à sonder les ports TCP et UDP du système cible pour déterminer si les services sont en cours d'exécution ou sont en état d'écoute. L'état d'écoute fournit des informations sur l'OS (=fingerprinting) et l'application en cours d'utilisation. Parfois, les services actifs à l'écoute peuvent permettre à des utilisateurs non autorisés de mal configurer les systèmes ou d'exécuter des logiciels présentant des vulnérabilités.
+- Network Scanning : Répertorie les hôtes actifs et les adresses IP.
+- Vulnerability Scanning : Affiche la présence de faiblesses connues. Un scanner de vulnérabilité se compose d'un moteur d'analyse et d'un catalogue. Le catalogue comprend une liste de fichiers communs avec des vulnérabilités connues et des exploits communs pour une gamme de serveurs. les ports sont les portes et les fenêtres d'un système qu'un intrus utilise pour y accéder.
+
+```
+nmap <options> <target IP address> #live hosts on the network, open ports, services, OS and version used, firewalls
+hping3 <options> <target IP address> #can be used for network security auditing, firewall testing, manual path MTU discovery, advanced traceroute, remote OS fingerprinting, remote uptime guessing, TCP/IP stacks auditing, etc.
+#default is TCP
+hping3 -1 #ICMP
+hping3 -A #ACK
+hping -2 #UDP 
+metasploit
+```
+
 ####  Enmeration
 ####  Vulnerability Analysis
 ### 3. System Hacking
-### Malware Threats
-### Sniffing
-### Hacking Wireless Networks, Denial-of-Service, Session Hijacking, SQL injection ..
+#### Malware Threats
+#### Sniffing
+#### Hacking Wireless Networks, Denial-of-Service, Session Hijacking, SQL injection ..
 
 
 
