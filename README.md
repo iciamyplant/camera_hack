@@ -308,7 +308,7 @@ ping 8.8.8.8 #je ping le serveur DNS de google
 | Etape |description|
 |------|----|
 |**1** | **Reconnaissance** : recolter le plus d'infos genre organization’s clients, employees, operations, network, and systems|
-|**2** | **Scanning** : utiliser les détails recueillis lors de la reconnaissance pour scanner le réseau à la recherche d'informations spécifiques genre mapping of systems, routers, and firewalls by using simple tools such as the standard Windows utility Traceroute. L'analyse peut inclure the use of dialers, port scanners, network mappers, ping tools, vulnerability scanners, or other tools. Les attaquants extraient des informations telles que les machines actives, le port, l'état du port, les détails du système d'exploitation, le type de périphérique et la disponibilité du système pour lancer une attaque. scanners de vulnérabilités, qui peuvent rechercher des milliers de vulnérabilités connues sur un réseau cible. Cela donne un avantage à l'attaquant car il n'a qu'à trouver un seul moyen d'entrée|
+|**2** | **Scanning** : utiliser les détails recueillis lors de la reconnaissance pour scanner le réseau à la recherche d'informations spécifiques genre mapping of systems, routers, and firewalls by using simple tools such as the standard Windows utility Traceroute. L'analyse peut inclure the use of dialers, port scanners, network mappers, ping tools, vulnerability scanners, or other tools. Les attaquants extraient des informations telles que les machines actives, le port, l'état du port, les détails du système d'exploitation, le type de périphérique et la disponibilité du système pour lancer une attaque. scanners de vulnérabilités, qui peuvent rechercher des milliers de vulnérabilités connues sur un réseau cible. Si vulnerabilite direct ca donne un avantage à l'attaquant car il n'a qu'à trouver un seul moyen d'entrée|
 |**3** | **Gaining Access** : Les attaquants utilisent les vulnérabilités identifiées lors des phases de reconnaissance et d'analyse pour accéder au système et au réseau cibles. The attacker can gain access to the OS, application, or network level (gain access to the target system locally (offline), over a LAN, or the Internet) avec differents types d'attaques. Une fois qu'un attaquant a accès au système cible, il essaie alors d'élever les privilèges afin de prendre le contrôle total. Ce faisant, ils compromettent également les systèmes intermédiaires qui y sont connectés.|
 |**4**| **Maintaining Access** : Une fois qu'un attaquant a accès au système cible avec des privilèges d'administrateur il peut utiliser à la fois le système et ses ressources à volonté. Les attaquants qui choisissent de ne pas être détectés suppriment les preuves de leur entrée et installent une porte dérobée ou un cheval de Troie pour obtenir un accès répété. Ils peuvent également installer des rootkits au niveau du noyau pour obtenir un accès administratif complet à l'ordinateur cible. Les rootkits accèdent au niveau du système d'exploitation, tandis que les chevaux de Troie accèdent au niveau de l'application. Les rootkits et les chevaux de Troie nécessitent que les utilisateurs les installent localement.|
 |**5**| **Clearing Tracks** : utilisent des utilitaires tels que PsTools, Netcat ou des chevaux de Troie pour effacer leurs empreintes des fichiers journaux du système. D'autres techniques incluent la stéganographie et la tunnellisation. Les administrateurs système peuvent déployer des IDS (systèmes de détection d'intrusion) et un logiciel antivirus basés sur l'hôte afin de détecter les chevaux de Troie et autres fichiers et répertoires apparemment compromis |
@@ -330,17 +330,66 @@ hping -2 #UDP
 metasploit
 ```
 
-####  Enmeration
+####  Enumeration
+Processus d'extraction des noms d'utilisateur, des noms de machine, des ressources réseau, des partages et des services d'un système ou d'un réseau. Selon les ports ouverts, on va enumerer :
+
+Techniques to extract informations :
+- **Extract usernames using email IDs**
+- **Extract information using default passwords** : nombreuses ressources en ligne fournissent une liste de mots de passe par défaut attribués par les fabricants à leurs produits
+- NetBIOS Enumeration (port 139 + sur windows)
+- **SNMP Enumeration (UDP 161)**
+- **NTP and NFS Enumeration**
+- **SMTP and DNS Enumeration** : Un administrateur réseau peut utiliser le transfert de zone DNS, avec commandes nslookup et dig, pour répliquer les données DNS sur plusieurs serveurs DNS ou sauvegarder des fichiers DNS. Dans cette operation il convertira tous les noms DNS et adresses IP hébergés par ce serveur en texte ASCII. Si le serveur DNS est mal config, le transfert de zone DNS peut être une méthode efficace pour obtenir des informations sur le réseau de l'organisation :listes de tous les hôtes nommés, sous-zones et adresses IP associées.
+- **LDAP Enumeration** : Microsoft Active Directory aurait une erreur de conception. toutes les tentatives d'authentification du service entraînent des messages d'erreur différents. Les attaquants en profitent pour énumérer des noms d'utilisateur valides, et s'ils trouvnet un nom d'utilisateur valide ils brute fore le mdp.
+
+```
+############Exemple d'enumuration############
+#####Si le systeme cible est sur Windows#####
+###et qu'il a le port 139 ouvert = Netbios###
+
+nbtstat [-a RemoteName] [-A IP Address] [-c] [-n] [-r] [-R] [-RR] [-s] [-S] [Interval]
+nbtstat -a <ip addres of the remote machine>
+nmap -sV -v --script nbstat.nse <target IP address>
+##Enumeration of user accounts with Pstools##
+PsExec - executes processes remotely 
+PsFile - shows files opened remotely 
+PsGetSid-displays the SID of a computer or user 
+PsKill - kills processes by name or process ID 
+PsInfo - lists information about a system 
+PsList - lists detailed information about processes
+PsLoggedOn - shows who is logged on locally and via resource sharing
+PsLogList - dumps event log records 
+PsPasswd - changes account passwords
+PsShutdown - shuts down and optionally reboots a computer
+```
+
+```
+############Exemple d'enumuration############
+#######Si le systeme cible utilise SNMP######
+###############port 161 ouvert###############
+
+Snmpcheck
+SoftPerfect Network Scanner
+```
+
 ####  Vulnerability Analysis
+
+```
+OpenVAS #scanner de vulnerabilites
+Nikto #scanner vulnerabilites d'un serveur web
+```
+
 ### 3. System Hacking
 #### Malware Threats
 #### Sniffing
 #### Hacking Wireless Networks, Denial-of-Service, Session Hijacking, SQL injection ..
 
+# Hack the Box
+### Installation
+Se connecter au VPN [tuto](https://www.youtube.com/watch?v=msCWpKegNlc)
 
-
-# Cyber Defense
-- [Tryhackme](https://tryhackme.com/paths)
-### Threat and Vulnerability Management
-### Secure Operations & Monitoring
-### Malware Analysis
+```
+sudo apt-get install network-manager-openvpn
+sudo openvpn --config /path/to/file.ovpn
+# initialization sequence completed = OK
+```
