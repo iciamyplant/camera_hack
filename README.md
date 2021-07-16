@@ -109,6 +109,22 @@ Chaque IP est associee a un hostname (= nom en toutes lettres plus facile à mé
 - lo : c'est la boucle locale. Tout le monde doit l'avoir c'est connexion a nous meme
 - packets *un chiffre pas egal a 0* indique l'interface active la plus utilisee 
 
+Sur mac :
+```
+#ap1: Access Point. This is used if you are using your MacBook as a wireless host where you are sharing its connection
+
+#en0 at one point "ethernet", now is WiFi = wireless connection
+#en1 is an ordinary ethernet connection
+#en2 
+#en3 is a connection using a Thunderbolt-to-ethernet adapter (adaptateur sur le mac)
+
+#p2p0 : interface pour AirDrop (le p2p apple)
+#awdl0: Apple Wireless Direct Link. WIFI p2p connection for things like AirDrop, Airplay, etc. Also used for Bluetooth
+
+#bridged0 : un pont quelconque entre deux interfaces, possiblement du vmware
+#fw0 is the FireWire network interface
+#utun0: Tunneling interface. Used for VPN connections to tunnel traffic or for software like Back To My Mack.
+```
 
 **netstat** :
 - netstat permet d'analyser ces connexions, de connaître des statistiques, etc.
