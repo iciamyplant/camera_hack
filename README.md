@@ -203,6 +203,11 @@ L'encapsulation : un message est envoyé depuis la couche 7 du modèle OSI, et i
 | nom des messages | Ce message est appelle une trame. La trame est le message envoyé sur le réseau, en couche 2. |
 | materiel| Le commutateur (= switch) est un matériel qui va pouvoir nous permettre de relier plusieurs machines entre elles. Nous allons donc brancher nos machines au switch, voire d'autres switchs à notre switch. Pour envoyer la trame vers la bonne machine, le switch se sert de l'adresse MAC destination contenue dans l'en-tête de la trame.|
 
+--> Pour l'IP privee : au sein d'un même réseau, chaque machine possède une et une seule adresse IP
+
+--> Pour l'IP publique : ordinateurs d'un meme reseau prive partagent une adresse publique (si on fait un test via un site What Is My IP? le site interrogera votre routeur ou votre Box et pas vos machines donc renverra l'IP publique).
+
+--> Les adresses IP privees sont differentes entre une VM et mon pc
 
 #### 2. Couche 3 : communiquer entre réseaux
 
@@ -236,6 +241,8 @@ route del default # enlever la route par defaut
 route add default gw 10.0.0.254 # changer la route par defaut pour 10.0.0.254
 route add -net 192.168.0.0 netmask 255.255.255.0 gw 10.0.0.253 #ajouter une route spécifique si nous le souhaitons pour aller vers le réseau 192.168.0.0/24 en passant par la passerelle 10.0.0.253
 ```
+
+--> Une box Internet est constitué d'un modem ADSL et d'un routeur 
 
 #### 3. Couche 4 : communiquer entre applications
 
@@ -390,8 +397,11 @@ SoftPerfect Network Scanner
 
 ####  Vulnerability Analysis
 
+acronyme CVE = désigne une liste publique de failles de sécurité informatique. Lorsque l'on parle d'une CVE, on fait généralement référence à l'identifiant d'une faille de sécurité répertoriée dans cette liste. Les identifiants CVE sont attribués par des autorités déléguées, les CNA (CVE Numbering Authority). Les CNA disposent de blocs d'identifiants CVE alloués par le MITRE, qui sont réservés et attribués aux failles au moment de leur découverte. 
+
 ```
 OpenVAS #scanner de vulnerabilites
+Nessus #logiciel scanner de vulnerabilites
 Nikto #scanner vulnerabilites d'un serveur web
 ```
 
@@ -408,4 +418,34 @@ Se connecter au VPN [tuto](https://www.youtube.com/watch?v=msCWpKegNlc)
 sudo apt-get install network-manager-openvpn
 sudo openvpn --config /path/to/file.ovpn
 # initialization sequence completed = OK
+```
+
+```
+######sur mon reseau######
+ifconfig
+curl ifconfig.me #addresse IP publique sous mac
+ipconfig getifaddr en0 #adress IP privee sur mon mac
+hostname -I #sous linux pour laddr IP privee
+```
+```
+######en savoir plus sur la cible######
+ping *addr ip cible* #Permet de savoir si la machine pingée est correctement joignable sur le reseau
+nmap -A *addr ip cible* #Active la détection du système d'exploitation et des versions (nous donnes les ports ouverts)
+```
+```
+######vulnerabilites connues######
+nmap --script=vuln *addr ip cible* #vulnerabilite connue, --script=<lua scripts>: ici <lua scripts> est une liste de répertoires ou de scripts séparés par des virgules
+searchsploit *nom du service qui tourne*
+msfconsole search *nom du service qui tourne*
+```
+```
+######exploit######
+msfconsole search cve:2003-0352 #chercher un exploit qui correspond a une faille par son CVE
+show exploits #afficher tous les exploits disponibles sur Metasploit
+search nom_exploit #pour chercher un exploit
+use nom_exploit #par exemple : use exploit/windows/dcerpc/ms03_026_dcom (path sous name quand on a search avec le cve)
+show targets
+set target *chiffre target* #Configurer la target
+info nom_exploit #Avoir des informations sur un exploit
+show options #Voir les options d’un exploit
 ```
