@@ -426,6 +426,7 @@ ifconfig
 curl ifconfig.me #addresse IP publique sous mac
 ipconfig getifaddr en0 #adress IP privee sur mon mac
 hostname -I #sous linux pour laddr IP privee
+nmap -sP *ip reseau*/*masque sous reseau* #connaitre le nombre de terminaux connectés aux wifi et leurs adresses IP ("... hosts up")
 ```
 ```
 ######en savoir plus sur la cible######
