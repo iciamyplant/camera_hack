@@ -349,12 +349,12 @@ Elle est là pour représenter les applications pour lesquelles nous allons mett
 ````
 ifconfig
 ifconfig eth0 10.0.0.1 netmask 255.255.255.0 #modifier son adresse et la remplacer par 10.0.0.1/24 
-````
-````
 ping 8.8.8.8 #je ping le serveur DNS de google
-````
-````
 route
+arp -a #permet de voir addr ip avec addr MAC si on fait un changement avec mitm attack
+curl ifconfig.me #addresse IP publique sous mac
+ipconfig getifaddr en0 #adress IP privee sur mon mac
+hostname -I #sous linux pour laddr IP privee
 ````
 
 si je suis sur VM attention reglages reseau [explication](https://chrtophe.developpez.com/tutoriels/gestion-reseau-machine-virtuelle/)
@@ -382,10 +382,10 @@ quels systèmes d'exploitation (et leurs versions) ils utilisent, quels types de
 ainsi que des douzaines d'autres caractéristiques.
 ###
 nmap [ <Types de scans> ...] [ <Options> ] { <spécifications des cibles> }
--A: Active la détection du système d'exploitation et des versions
-sP: Ping Scan - Ne fait que déterminer si les hôtes sont en ligne
+nmap -A *addripcible* #ports ouverts (-A = Active la détection du système d'exploitation et des versions)
 --traceroute: Détermine une route vers chaque hôte
-nmap -sP *addrreseau**masquesousreseauCIDR*
+nmap -sP *addrreseau**masquesousreseauCIDR* #hosts up (sP: Ping Scan - Ne fait que déterminer si les hôtes sont en ligne)
+sudo nmap -sn *addrreseau**masquesousreseauCIDR* #hosts up + Addr mac + nous dit si (apple) ... ## QUI EST SUR MON RESEAU ?
 `````
 
 ```
@@ -457,17 +457,38 @@ Wireshark est un sniffer. Un sniffer est un programme qui écoute sur le réseau
 - en cliquant sur l'une des trames on voit que Wireshark sépare les éléments de chacune des couches du modèle OSI
 - on peut voir le contenu de chacune des couches en cliquant sur le triangle en face d'une couche
 
-[tuto wireshark](https://openclassrooms.com/fr/courses/857447-apprenez-le-fonctionnement-des-reseaux-tcp-ip/855562-rendre-mes-applications-joignables-sur-le-reseau)
+[infos sur wireshark](https://openclassrooms.com/fr/courses/857447-apprenez-le-fonctionnement-des-reseaux-tcp-ip/855562-rendre-mes-applications-joignables-sur-le-reseau)
+
+````
+apt-get install wireshark
+sudo wireshark #ECOUTER MON PROPRE RESEAU, sauf si MITM ATTACK
+#interface reseau utilisee par cible et routeur et machine qui attaque (eth0)
+filter : ip.addr == *addrcible*
+filter : ip.addr == *addrcible* && http #pour voir les requetes http. tester sur mon propre reseau, marche correctement sur sites http sans SSL
+````
 
 Tcpdump est un sniffer, comme wireshark, mais en ligne de commande sous linux.
- est un sniffer. C'est un programme qui est capable d'écouter toutes les trames qui arrivent sur notre carte réseau et de nous les afficher à l'écran (comme wireshark, mais en ligne de commande sous linux).
 ````
-tcpdump -i eth0 icmp
+tcpdump -i eth0 -n port 80 and host *addripquonveutecouter* #on ecoute le port 80 de la machine cible
 ````
 
 #### Hacking Wireless Networks
+
 - ARP poisoning using Ettercap, MiTM attack
-ARP poisoning is an attack that is accomplished using the technique of ARP spoofing
+ARP poisoning is an attack that is accomplished using the technique of ARP spoofing. 
+ARP protocol :  protocole utilisé pour traduire une adresse de protocole de couche réseau (adresse IPv4) en une adresse de protocole de couche de liaison (adresse MAC). 
+
+Ettercap
+````
+sudo ettercap -T -S -i eth0 -M arp:remote /*addrrouteur*// /*addrmachinecible*//
+*addrrouteur* = target1
+*addrmachinecible* = target2
+##sur linterface graphique : 
+off le sniffing at startup, valider
+loupe pour voir qui est sur mon reseau, puis emoticone a droite de la loupe pr guetter mes targets
+selectionner les targets
+lancer mitm attack
+````
 
 #### Malware Threats, Denial-of-Service, Session Hijacking, SQL injection ..
 
@@ -485,10 +506,6 @@ sudo openvpn --config /path/to/file.ovpn
 
 ```
 ######sur mon reseau######
-ifconfig
-curl ifconfig.me #addresse IP publique sous mac
-ipconfig getifaddr en0 #adress IP privee sur mon mac
-hostname -I #sous linux pour laddr IP privee
 nmap -sP *ip reseau*/*masque sous reseau* #connaitre le nombre de terminaux connectés aux wifi et leurs adresses IP ("... hosts up")
 ```
 ```
