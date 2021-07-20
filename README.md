@@ -1,4 +1,38 @@
-# Linux Fundamentals
+## plan
+### I - Linux Fundamentals
+- Les utilisateurs et les droits
+- Installer des programmes avec apt-get
+- Surveiller l'activité du système
+- Exécuter des programmes en arrière-plan
+- La connexion sécurisée à distance avec SSH
+- Analyser le réseau et filtrer le trafic avec un pare-feu
+### II - Network Fundamentals
+#### OSI Model
+- .1. Couche 1 et 2 : communiquer dans un réseau local (LAN)
+- .2. Couche 3 : communiquer entre réseaux
+- .3. Couche 4 : communiquer entre applications
+- .4. Couche 7 : Applications 
+- .5. protocoles DHCP, DNS, et HTTP
+### III - Offensive Pentesting
+#### Attaques
+#### Etapes
+#### .1. Footprinting and Reconnaissance
+#### .2. Scanning Networks
+- Ma machine
+- Scanning
+- Enumeration
+- Vulnerability Analysis
+#### .3. System Hacking
+- Sniffing
+- Hacking Wireless Networks
+- Malware Threats, Denial-of-Service, Session Hijacking, SQL injection ..
+### IV - Hack the Box
+- Installation
+- Methodo
+
+
+
+# I - Linux Fundamentals
 - [cours openclassroom](https://openclassrooms.com/fr/courses/43538-reprenez-le-controle-a-laide-de-linux/38351-la-structure-des-dossiers-et-fichiers)
 ### Les utilisateurs et les droits
 Linux est un système multi-utilisateurs = plusieurs personnes peuvent travailler simultanément sur le même OS, en s'y connectant à distance notamment
@@ -144,7 +178,7 @@ Sur mac :
 
 - [Tryhackme](https://tryhackme.com/room/linuxfundamentalspart1)
 
-# Network Fundamentals
+# II - Network Fundamentals
 - [Tryhackme](https://tryhackme.com/paths)
 - [openclassroom](https://openclassrooms.com/fr/courses/857447-apprenez-le-fonctionnement-des-reseaux-tcp-ip/853038-le-materiel-de-couche-2-le-commutateur)
 
@@ -277,42 +311,8 @@ Elle est là pour représenter les applications pour lesquelles nous allons mett
 - Protocole HTTP = Le principe du protocole HTTP est de transporter ces pages HTML, et potentiellement quelques informations supplémentaires. Le serveur web met donc à disposition les pages web qu'il héberge, et le protocole HTTP les transporte sur le réseau pour les amener au client.
 
 
-### Ifconfig
-````
-ifconfig
-ifconfig eth0 10.0.0.1 netmask 255.255.255.0 #modifier son adresse et la remplacer par 10.0.0.1/24 
-````
 
-- La première est l'interface eth0 (eth pour Ethernet !) qui est ma carte réseau.
-- Enfin nous avons l'interface lo (pour local, ou loopback) qui est une interface réseau virtuelle qui n'est accessible que sur la machine elle-même. Son adresse est toujours 127.0.0.1, sur toutes les machines. C'est une convention.
-- Si ifconfig indique inet adr:88.191.45.68  Bcast:88.191.45.255  Masque:255.255.255.0 : adresse IP 88.191.45.68, masque 255.255.255.0 et l'adresse de broadcast 88.191.45.255.
-
-
-### Wireshark et tcpdump
-Wireshark est un sniffer. Un sniffer est un programme qui écoute sur le réseau, intercepte toutes les trames reçues par votre carte réseau, et les affiche à l'écran.
-- on peut voir la liste des trames reçues lors d'une requête (couche 1 "Frame 187", la couche 2 "Ethernet", la couche 3 "IP" etc.),
-- en cliquant sur l'une des trames on voit que Wireshark sépare les éléments de chacune des couches du modèle OSI
-- on peut voir le contenu de chacune des couches en cliquant sur le triangle en face d'une couche
-
-[tuto wireshark](https://openclassrooms.com/fr/courses/857447-apprenez-le-fonctionnement-des-reseaux-tcp-ip/855562-rendre-mes-applications-joignables-sur-le-reseau)
-
-Tcpdump est un sniffer, comme wireshark, mais en ligne de commande sous linux.
- est un sniffer. C'est un programme qui est capable d'écouter toutes les trames qui arrivent sur notre carte réseau et de nous les afficher à l'écran (comme wireshark, mais en ligne de commande sous linux).
-````
-tcpdump -i eth0 icmp
-````
-
-### Ping
-Machine emetrice du ping fait un ICMP echo request, machine receptrice fait un ICMP echo reply (ping utilise le protocole ICMP). Permet de savoir si la machine pingée est correctement joignable sur le reseau. + mesure le temps necessaire au paquet pour faire l'aller retour entre la machine emetrice et la machine receptrice.
-
-````
-ping 8.8.8.8 #je ping le serveur DNS de google
-````
-
-
-
-
-# Offensive Pentesting
+# III - Offensive Pentesting
 - [Certification CEH v11](https://bookshelf.vitalsource.com/#/books/9781635675337/cfi/112!/4/4@0.00:36.5)
 - [Tryhackme](https://tryhackme.com/paths)
 
@@ -338,19 +338,62 @@ ping 8.8.8.8 #je ping le serveur DNS de google
 
 ### 1. Footprinting and Reconnaissance
 ### 2. Scanning Networks
+
+####  Ma machine
+
+| ifconfig | Ping | Route |
+|----------|-------|--------|
+| - La première est l'interface eth0 (eth pour Ethernet !) qui est ma carte réseau. - Enfin nous avons l'interface lo (pour local, ou loopback) qui est une interface réseau virtuelle qui n'est accessible que sur la machine elle-même. Son adresse est toujours 127.0.0.1, sur toutes les machines. C'est une convention. - Si ifconfig indique inet adr:88.191.45.68  Bcast:88.191.45.255  Masque:255.255.255.0 : adresse IP 88.191.45.68, masque 255.255.255.0 et l'adresse de broadcast 88.191.45.255.  | Machine emetrice du ping fait un ICMP echo request, machine receptrice fait un ICMP echo reply (ping utilise le protocole ICMP). Permet de savoir si la machine pingée est correctement joignable sur le reseau. + mesure le temps necessaire au paquet pour faire l'aller retour entre la machine emetrice et la machine receptrice. | pour avoir mon gateway (= routeur)|
+
+
+````
+ifconfig
+ifconfig eth0 10.0.0.1 netmask 255.255.255.0 #modifier son adresse et la remplacer par 10.0.0.1/24 
+````
+````
+ping 8.8.8.8 #je ping le serveur DNS de google
+````
+````
+route
+````
+
+si je suis sur VM attention reglages reseau [explication](https://chrtophe.developpez.com/tutoriels/gestion-reseau-machine-virtuelle/)
+- soit jutilise le LAN (et j'ai addresse IP de type 10.0.2.2)
+- soit j'utilise un pont avec ma machine hote. Dans ce mode, la carte réseau virtuelle est « pontée » à une carte réseau physique de l’hôte. Cette carte réseau aura donc 2 adresses IP, une dédiée à l'hôte et l'autre dédiée à la machine virtuelle. 
+
+
+[calculateur ip et infos](http://www.hobbesworld.com/reseaux/calcip.php#gene) 
+
+[CIDR masque de sous-reseau](https://fr.wikipedia.org/wiki/Sous-r%C3%A9seau)
+
+
 ####  Scanning
-- Port Scanning : Répertorie les ports et services ouverts. L'analyse des ports consiste à se connecter ou à sonder les ports TCP et UDP du système cible pour déterminer si les services sont en cours d'exécution ou sont en état d'écoute. L'état d'écoute fournit des informations sur l'OS (=fingerprinting) et l'application en cours d'utilisation. Parfois, les services actifs à l'écoute peuvent permettre à des utilisateurs non autorisés de mal configurer les systèmes ou d'exécuter des logiciels présentant des vulnérabilités.
-- Network Scanning : Répertorie les hôtes actifs et les adresses IP.
-- Vulnerability Scanning : Affiche la présence de faiblesses connues. Un scanner de vulnérabilité se compose d'un moteur d'analyse et d'un catalogue. Le catalogue comprend une liste de fichiers communs avec des vulnérabilités connues et des exploits communs pour une gamme de serveurs. les ports sont les portes et les fenêtres d'un système qu'un intrus utilise pour y accéder.
+
+| Port Scanning | Network Scanning | Vulnerability Scanning |
+|----------|-------|--------|
+| Répertorie les ports et services ouverts. L'analyse des ports consiste à se connecter ou à sonder les ports TCP et UDP du système cible pour déterminer si les services sont en cours d'exécution ou sont en état d'écoute. L'état d'écoute fournit des informations sur l'OS (=fingerprinting) et l'application en cours d'utilisation. Parfois, les services actifs à l'écoute peuvent permettre à des utilisateurs non autorisés de mal configurer les systèmes ou d'exécuter des logiciels présentant des vulnérabilités. | Répertorie les hôtes actifs et les adresses IP.| Affiche la présence de faiblesses connues. Un scanner de vulnérabilité se compose d'un moteur d'analyse et d'un catalogue. Le catalogue comprend une liste de fichiers communs avec des vulnérabilités connues et des exploits communs pour une gamme de serveurs. les ports sont les portes et les fenêtres d'un système qu'un intrus utilise pour y accéder.|
+
+[doc de reference nmap](https://nmap.org/man/fr/index.html)
+`````
+###sur l'outil nmap : 
+outil open source d'exploration réseau, a été conçu pour rapidement scanner de grands réseaux, fonctionne aussi très bien sur une cible unique. 
+Détermine quels sont les hôtes actifs sur le réseau, quels services (y compris le nom de l'application et la version) ces hôtes offrent, 
+quels systèmes d'exploitation (et leurs versions) ils utilisent, quels types de dispositifs de filtrage/pare-feux sont utilisés, 
+ainsi que des douzaines d'autres caractéristiques.
+###
+nmap [ <Types de scans> ...] [ <Options> ] { <spécifications des cibles> }
+-A: Active la détection du système d'exploitation et des versions
+sP: Ping Scan - Ne fait que déterminer si les hôtes sont en ligne
+--traceroute: Détermine une route vers chaque hôte
+nmap -sP *addrreseau**masquesousreseauCIDR*
+`````
 
 ```
-nmap <options> <target IP address> #live hosts on the network, open ports, services, OS and version used, firewalls
 hping3 <options> <target IP address> #can be used for network security auditing, firewall testing, manual path MTU discovery, advanced traceroute, remote OS fingerprinting, remote uptime guessing, TCP/IP stacks auditing, etc.
 #default is TCP
 hping3 -1 #ICMP
 hping3 -A #ACK
 hping -2 #UDP 
-metasploit
 ```
 
 ####  Enumeration
@@ -403,14 +446,32 @@ acronyme CVE = désigne une liste publique de failles de sécurité informatique
 OpenVAS #scanner de vulnerabilites
 Nessus #logiciel scanner de vulnerabilites
 Nikto #scanner vulnerabilites d'un serveur web
+metasploit
 ```
 
 ### 3. System Hacking
-#### Malware Threats
 #### Sniffing
-#### Hacking Wireless Networks, Denial-of-Service, Session Hijacking, SQL injection ..
 
-# Hack the Box
+Wireshark est un sniffer. Un sniffer est un programme qui écoute sur le réseau, intercepte toutes les trames reçues par votre carte réseau, et les affiche à l'écran.
+- on peut voir la liste des trames reçues lors d'une requête (couche 1 "Frame 187", la couche 2 "Ethernet", la couche 3 "IP" etc.),
+- en cliquant sur l'une des trames on voit que Wireshark sépare les éléments de chacune des couches du modèle OSI
+- on peut voir le contenu de chacune des couches en cliquant sur le triangle en face d'une couche
+
+[tuto wireshark](https://openclassrooms.com/fr/courses/857447-apprenez-le-fonctionnement-des-reseaux-tcp-ip/855562-rendre-mes-applications-joignables-sur-le-reseau)
+
+Tcpdump est un sniffer, comme wireshark, mais en ligne de commande sous linux.
+ est un sniffer. C'est un programme qui est capable d'écouter toutes les trames qui arrivent sur notre carte réseau et de nous les afficher à l'écran (comme wireshark, mais en ligne de commande sous linux).
+````
+tcpdump -i eth0 icmp
+````
+
+#### Hacking Wireless Networks
+- ARP poisoning using Ettercap, MiTM attack
+ARP poisoning is an attack that is accomplished using the technique of ARP spoofing
+
+#### Malware Threats, Denial-of-Service, Session Hijacking, SQL injection ..
+
+# IV - Hack the Box
 ### Installation
 Se connecter au VPN [tuto](https://www.youtube.com/watch?v=msCWpKegNlc)
 
@@ -419,6 +480,8 @@ sudo apt-get install network-manager-openvpn
 sudo openvpn --config /path/to/file.ovpn
 # initialization sequence completed = OK
 ```
+
+### Methodo
 
 ```
 ######sur mon reseau######
