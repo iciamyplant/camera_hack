@@ -480,9 +480,9 @@ ARP protocol :  protocole utilisé pour traduire une adresse de protocole de cou
 
 [Ettercap doc reference](https://www.irongeek.com/i.php?page=backtrack-3-man/ettercap)
 ````
-sudo ettercap -T -S -i eth0 -M arp:remote /*addrrouteur*// /*addrmachinecible*//
-*addrrouteur* = target1
-*addrmachinecible* = target2
+sudo ettercap -T -S -i eth0 -M arp:remote /*addrmachinecible*// /*addrrouteur*//
+*addrmachinecible* = target1
+*addrrouteur* = target2
 ##sur linterface graphique : 
 off le sniffing at startup, valider
 loupe pour voir qui est sur mon reseau, puis emoticone a droite de la loupe pr guetter mes targets
