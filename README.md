@@ -23,8 +23,8 @@
 - Enumeration
 - Vulnerability Analysis
 #### .3. System Hacking
-- Sniffing
-- Hacking Wireless Networks
+- Sniffing : Wireshark / Tcpdump
+- Hacking Wireless Networks : Attaques MiTM
 - Malware Threats, Denial-of-Service, Session Hijacking, SQL injection ..
 ### IV - Hack the Box
 - Installation
@@ -491,6 +491,11 @@ lancer mitm attack
 => checker si changement de MAC pour le routeur a marche sur la machine cible : arp -a
 => pinger le routeur, normalement prend plus de temps qu'un ping classique
 ````
+
+Si y a des problemes lors du ping et que le forwarding des paquets n'est pas active :
+```
+echo 1 > /proc/sys/net/ipv4/ip_forward #activer le forwarding des paquets
+```
 
 #### Malware Threats, Denial-of-Service, Session Hijacking, SQL injection ..
 
