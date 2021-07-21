@@ -355,6 +355,7 @@ arp -a #permet de voir addr ip avec addr MAC si on fait un changement avec mitm 
 curl ifconfig.me #addresse IP publique sous mac
 ipconfig getifaddr en0 #adress IP privee sur mon mac
 hostname -I #sous linux pour laddr IP privee
+lsof -Pn -i4 #voir mes ports ouvert sur mac
 ````
 
 si je suis sur VM attention reglages reseau [explication](https://chrtophe.developpez.com/tutoriels/gestion-reseau-machine-virtuelle/)
@@ -375,17 +376,26 @@ si je suis sur VM attention reglages reseau [explication](https://chrtophe.devel
 
 [doc de reference nmap](https://nmap.org/man/fr/index.html)
 `````
-###sur l'outil nmap : 
+####sur l'outil nmap : 
 outil open source d'exploration réseau, a été conçu pour rapidement scanner de grands réseaux, fonctionne aussi très bien sur une cible unique. 
 Détermine quels sont les hôtes actifs sur le réseau, quels services (y compris le nom de l'application et la version) ces hôtes offrent, 
 quels systèmes d'exploitation (et leurs versions) ils utilisent, quels types de dispositifs de filtrage/pare-feux sont utilisés, 
 ainsi que des douzaines d'autres caractéristiques.
-###
+####
 nmap [ <Types de scans> ...] [ <Options> ] { <spécifications des cibles> }
-nmap -A *addripcible* #ports ouverts (-A = Active la détection du système d'exploitation et des versions)
 --traceroute: Détermine une route vers chaque hôte
 nmap -sP *addrreseau**masquesousreseauCIDR* #hosts up (sP: Ping Scan - Ne fait que déterminer si les hôtes sont en ligne)
 sudo nmap -sn *addrreseau**masquesousreseauCIDR* #hosts up + Addr mac + nous dit si (apple) ... ## QUI EST SUR MON RESEAU ?
+####
+#Si j'ouvre un port 80:80 sur mon mac 
+brew install nginx
+brew services start nginx
+brew services list
+#et que je regarde sur mon kali
+nmap -A *addripcible* #ports ouverts (-A = Active la détection du système d'exploitation et des versions) #me donne le port 80:80 ouvert
+####
+#Si je teste les vulnerabilites
+nmap -sV --script vuln *addripcible*
 `````
 
 ```
@@ -443,11 +453,26 @@ SoftPerfect Network Scanner
 acronyme CVE = désigne une liste publique de failles de sécurité informatique. Lorsque l'on parle d'une CVE, on fait généralement référence à l'identifiant d'une faille de sécurité répertoriée dans cette liste. Les identifiants CVE sont attribués par des autorités déléguées, les CNA (CVE Numbering Authority). Les CNA disposent de blocs d'identifiants CVE alloués par le MITRE, qui sont réservés et attribués aux failles au moment de leur découverte. 
 
 ```
+nmap -sV --script vuln *addripcible* #imaginons que j'ai un nginx de lance sur mon ordi cible
+CSRF vulnerabilites
+DOM based XXS
+stored XXS vulnerabilites
+VULNERABLE : apache web server cve:cve-2011-3192
+apache web server vulnerable to a Ddos attack
+#brew remove nginx
+# pour fermer un port sur mac :
+# lsof -Pn -i4 #pour lister port ouvert, je peux recupeer pid
+# sudo kill -9 PID
+```
+
+```
 OpenVAS #scanner de vulnerabilites
 Nessus #logiciel scanner de vulnerabilites
 Nikto #scanner vulnerabilites d'un serveur web
 metasploit
 ```
+
+
 
 ### 3. System Hacking
 #### Sniffing
@@ -491,11 +516,18 @@ lancer mitm attack
 => checker si changement de MAC pour le routeur a marche sur la machine cible : arp -a
 => pinger le routeur, normalement prend plus de temps qu'un ping classique
 ````
+The principles  and techniques of a MiTM attack remain the same as with arpspoof  with the small exception of the ip_forward. Unlike arpspoof, ettercap does not use ip forwarding in the Linux kernel, but instead uses it own module to forward IP packets
 
+http://www.kali-linux.fr/forum/index.php?topic=3948.0
+
+http://www.kali-linux.fr/forum/index.php/topic,3822.0.html
+
+- on peut faire la meme avec arpspoof et dnsspoof
 Si y a des problemes lors du ping et que le forwarding des paquets n'est pas active :
 ```
 echo 1 > /proc/sys/net/ipv4/ip_forward #activer le forwarding des paquets
 ```
+
 
 #### Malware Threats, Denial-of-Service, Session Hijacking, SQL injection ..
 
